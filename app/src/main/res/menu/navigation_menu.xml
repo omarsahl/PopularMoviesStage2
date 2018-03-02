@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_favorites"
+        android:enabled="true"
+        android:icon="@drawable/ic_favorite_24dp"
+        android:title="@string/text_favorites"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_popular"
+        android:enabled="true"
+        android:icon="@drawable/ic_trending"
+        android:title="@string/text_trending"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_top_rated"
+        android:enabled="true"
+        android:icon="@drawable/ic_top_rated"
+        android:title="@string/text_top_rated"
+        app:showAsAction="ifRoom" />
+</menu>

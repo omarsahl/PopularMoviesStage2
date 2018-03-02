@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Pop Movies</string>
+
+    <string name="movies_db_poster_base_url_poster_w342">http://image.tmdb.org/t/p/w342</string>
+    <string name="movies_db_poster_base_url_backdrop_w780">http://image.tmdb.org/t/p/w780</string>
+    <string name="movies_db_actor_image_base_url_w342">http://image.tmdb.org/t/p/w342</string>
+
+    <string name="popular_movies">Popular Movies</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="no_internet_message">No Internet Connection</string>
+    <string name="text_favorites">Favorites</string>
+    <string name="text_trending">Popular</string>
+    <string name="text_top_rated">Top Rated</string>
+    <string name="movie_backdrop_image_description">Movie Backdrop Image</string>
+    <string name="play_trailer_description">Play Trailer</string>
+    <string name="overview_label">overview</string>
+    <string name="actors_label">actors</string>
+    <string name="reviews_label">reviews</string>
+    <string name="about_movie_label">about movie</string>
+</resources>

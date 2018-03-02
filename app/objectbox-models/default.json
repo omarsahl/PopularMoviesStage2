@@ -1,0 +1,203 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:4212555980230108352",
+      "lastPropertyId": "9:7134031992310694514",
+      "name": "Movie",
+      "properties": [
+        {
+          "id": "1:7222224989849138520",
+          "name": "id"
+        },
+        {
+          "id": "2:9075883771422155497",
+          "name": "title"
+        },
+        {
+          "id": "3:4306589923313031320",
+          "name": "releaseDate"
+        },
+        {
+          "id": "4:2707071434319076014",
+          "name": "posterUrl"
+        },
+        {
+          "id": "5:2283129161173669423",
+          "name": "rating"
+        },
+        {
+          "id": "6:8523225920232388359",
+          "name": "overview"
+        },
+        {
+          "id": "7:4029329159447501619",
+          "name": "backDropUrl"
+        },
+        {
+          "id": "8:7910517208307561803",
+          "name": "duration"
+        },
+        {
+          "id": "9:7134031992310694514",
+          "name": "voteCount"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:482809404540682715",
+          "name": "actors"
+        },
+        {
+          "id": "2:2185011713121974679",
+          "name": "reviews"
+        },
+        {
+          "id": "3:2760260972835569810",
+          "name": "videos"
+        }
+      ]
+    },
+    {
+      "id": "3:7430249082583673541",
+      "lastPropertyId": "5:8303609930709350372",
+      "name": "MoviePreview",
+      "properties": [
+        {
+          "id": "1:1525837268356615353",
+          "name": "id"
+        },
+        {
+          "id": "2:1699936325454085049",
+          "name": "title"
+        },
+        {
+          "id": "3:1878802775426897826",
+          "name": "posterUrl"
+        },
+        {
+          "id": "4:8491959335468546086",
+          "name": "backdropUrl"
+        },
+        {
+          "id": "5:8303609930709350372",
+          "name": "tag"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:3224139646654155362",
+      "lastPropertyId": "5:1170101988380698687",
+      "name": "Actor",
+      "properties": [
+        {
+          "id": "1:5954959191631045413",
+          "name": "id"
+        },
+        {
+          "id": "2:4933351253682974695",
+          "name": "character"
+        },
+        {
+          "id": "3:5232732113194099971",
+          "name": "name"
+        },
+        {
+          "id": "4:6819006703194965392",
+          "name": "profileImage"
+        },
+        {
+          "id": "5:1170101988380698687",
+          "name": "order"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:3080134065043243703",
+      "lastPropertyId": "6:8851998602713769251",
+      "name": "Review",
+      "properties": [
+        {
+          "id": "2:2177477151982986368",
+          "name": "strId"
+        },
+        {
+          "id": "3:135678336002164556",
+          "name": "author"
+        },
+        {
+          "id": "4:3765127458534765633",
+          "name": "content"
+        },
+        {
+          "id": "5:7682981541761530687",
+          "name": "url"
+        },
+        {
+          "id": "6:8851998602713769251",
+          "name": "id"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:171769271367706932",
+      "lastPropertyId": "7:8907250980757329764",
+      "name": "Video",
+      "properties": [
+        {
+          "id": "1:7945914909662839975",
+          "name": "id"
+        },
+        {
+          "id": "2:6305237166728789669",
+          "name": "strId"
+        },
+        {
+          "id": "3:3142116898377520259",
+          "name": "key"
+        },
+        {
+          "id": "4:1270546960299701066",
+          "name": "name"
+        },
+        {
+          "id": "5:2571201282170481117",
+          "name": "site"
+        },
+        {
+          "id": "6:1395033025362625100",
+          "name": "size"
+        },
+        {
+          "id": "7:8907250980757329764",
+          "name": "type"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "6:171769271367706932",
+  "lastIndexId": "0:0",
+  "lastRelationId": "3:2760260972835569810",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [
+    801583386171621524
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    4391614799406307921,
+    1940064031786914097,
+    3055106734223763845,
+    2833230594105429294,
+    9070473344640855830
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
