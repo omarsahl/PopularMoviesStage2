@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:4212555980230108352",
-      "lastPropertyId": "9:7134031992310694514",
+      "lastPropertyId": "10:7572837811617768471",
       "name": "Movie",
       "properties": [
         {
@@ -43,22 +43,14 @@
         {
           "id": "9:7134031992310694514",
           "name": "voteCount"
+        },
+        {
+          "id": "10:7572837811617768471",
+          "indexId": "1:4574642724074946796",
+          "name": "creditsId"
         }
       ],
-      "relations": [
-        {
-          "id": "1:482809404540682715",
-          "name": "actors"
-        },
-        {
-          "id": "2:2185011713121974679",
-          "name": "reviews"
-        },
-        {
-          "id": "3:2760260972835569810",
-          "name": "videos"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "3:7430249082583673541",
@@ -90,7 +82,7 @@
     },
     {
       "id": "4:3224139646654155362",
-      "lastPropertyId": "5:1170101988380698687",
+      "lastPropertyId": "6:1059081193066770794",
       "name": "Actor",
       "properties": [
         {
@@ -112,6 +104,11 @@
         {
           "id": "5:1170101988380698687",
           "name": "order"
+        },
+        {
+          "id": "6:1059081193066770794",
+          "indexId": "2:1483407974067684859",
+          "name": "creditsId"
         }
       ],
       "relations": []
@@ -179,11 +176,23 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "7:4765389046504038797",
+      "lastPropertyId": "1:5300993777672049040",
+      "name": "MovieCredits",
+      "properties": [
+        {
+          "id": "1:5300993777672049040",
+          "name": "id"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "6:171769271367706932",
-  "lastIndexId": "0:0",
-  "lastRelationId": "3:2760260972835569810",
+  "lastEntityId": "7:4765389046504038797",
+  "lastIndexId": "2:1483407974067684859",
+  "lastRelationId": "4:7384177546737547912",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
@@ -198,6 +207,11 @@
     2833230594105429294,
     9070473344640855830
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    482809404540682715,
+    2185011713121974679,
+    2760260972835569810,
+    7384177546737547912
+  ],
   "version": 1
 }

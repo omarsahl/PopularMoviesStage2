@@ -14,7 +14,7 @@
     <string name="movie_backdrop_image_description">Movie Backdrop Image</string>
     <string name="play_trailer_description">Play Trailer</string>
     <string name="overview_label">overview</string>
-    <string name="actors_label">actors</string>
+    <string name="actors_label">credits</string>
     <string name="reviews_label">reviews</string>
     <string name="about_movie_label">about movie</string>
 </resources>

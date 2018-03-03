@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Omar on 25-Feb-18 5:55 PM
  */
 
-public class ReviewsContainer {
+public class MovieReviews {
     @SerializedName("id")
     private long id;
 
@@ -24,7 +24,7 @@ public class ReviewsContainer {
     @SerializedName("total_results")
     private int reviewsCount;
 
-    public ReviewsContainer() {}
+    public MovieReviews() {}
 
     public long getId() {
         return id;

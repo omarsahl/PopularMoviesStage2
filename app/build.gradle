@@ -60,6 +60,8 @@ dependencies {
 
     implementation 'com.github.medyo:fancybuttons:1.8.4'
 
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
     implementation 'io.objectbox:objectbox-rxjava:0.9.8'
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectboxVersion"
     releaseImplementation "io.objectbox:objectbox-android:$objectboxVersion"

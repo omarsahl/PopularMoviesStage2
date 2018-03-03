@@ -3,12 +3,15 @@ package com.os.popularmoviesstage2.repository;
 import android.util.Log;
 
 import com.os.popularmoviesstage2.app.Constants;
+import com.os.popularmoviesstage2.models.Actor;
 import com.os.popularmoviesstage2.models.Movie;
+import com.os.popularmoviesstage2.models.MovieCredits;
 import com.os.popularmoviesstage2.models.MoviePreview;
 import com.os.popularmoviesstage2.models.MoviePreview_;
 import com.os.popularmoviesstage2.models.Movie_;
 import com.os.popularmoviesstage2.models.MoviesPage;
 import com.os.popularmoviesstage2.repository.api.MovieDbApi;
+import com.os.popularmoviesstage2.utils.MovieDetailsUtils;
 
 import java.util.List;
 
@@ -127,6 +130,7 @@ public class MoviesRepository {
                     Log.e(TAG, "Couldn't load movie (id=" + id + ") from API, Trying DB (" + Thread.currentThread().getName() + ")", e);
                     return getMovieDetailsFromDb(id);
                 })
+                .onErrorReturnItem(MovieDetailsUtils.getNullMovie())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
@@ -134,21 +138,30 @@ public class MoviesRepository {
         return Observable.zip(
                 movieApi.getMovie(id),
                 movieApi.getMovieVideos(id),
-                movieApi.getMovieCredits(id),
+                movieApi.getMovieCredits(id).doOnNext(this::saveCreditsToDb),
                 movieApi.getMovieReviews(id),
-                (movie, movieVideos, movieCredits, reviewsContainer) -> {
-                    movie.getActors().addAll(movieCredits.getCast());
-                    movie.getVideos().addAll(movieVideos.getResults());
-                    movie.getReviews().addAll(reviewsContainer.getReviews());
+                (movie, movieVideos, movieCredits, movieReviews) -> {
+//                    // workaround for this exception "io.objectbox.exception.DbDetachedException: Cannot resolve relation for detached entities"
+//                    // just for now.
+//                    // -------------------
+//                    Box<Movie> movieBox = boxStore.boxFor(Movie.class);
+//                    movieBox.attach(movie);
+//                    // -------------------
+
+                    movie.getCredits().setTarget(movieCredits);
+//                        movie.getVideos().addAll(movieVideos.getResults());
+//                        movie.getReviews().addAll(movieReviews.getReviews());
+
                     return movie;
-                })
-                .doOnNext(this::saveMovieToDb);
+                }).doOnNext(this::saveMovieToDb);
     }
 
     private Observable<Movie> getMovieDetailsFromDb(long id) {
         Log.d(TAG, "getMovieDetailsFromDb: getting movie from cache DB. (" + Thread.currentThread().getName() + ")");
         Box<Movie> box = boxStore.boxFor(Movie.class);
-        return Observable.just(box.query().equal(Movie_.id, id).build().findFirst()).doOnError((e) -> Log.e(TAG, "getMovieDetailsFromDb: Couldn't get movie details from DB", e));
+        return Observable.just(box.query().equal(Movie_.id, id).build().findFirst())
+                .doOnNext(movie -> Log.d(TAG, "getMovieDetailsFromDb: found a matching movie in DB? " + (movie != null)))
+                .doOnError((e) -> Log.e(TAG, "getMovieDetailsFromDb: Couldn't get movie details from DB", e));
     }
 
     private void saveMovieToDb(Movie movie) {
@@ -157,5 +170,28 @@ public class MoviesRepository {
                 .observeOn(Schedulers.io())
                 .doOnError(throwable -> Log.e(TAG, "saveMovieToDb: Couldn't save movie to ObjectBox DB", throwable))
                 .subscribe(() -> Log.d(TAG, "Saved (" + movie.toString() + ")" + " to ObjectBox DB"));
+    }
+
+    private void saveCreditsToDb(MovieCredits credits) {
+        Completable.fromAction(() -> {
+            saveFirst10ActorsInDb(credits);
+            boxStore.boxFor(MovieCredits.class).put(credits);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .doOnError((e) -> Log.e(TAG, "saveCreditsToDb: Couldn't save credits and cast to DB", e))
+                .subscribe(() -> Log.d(TAG, "saveCreditsToDb: Saved " + credits.getId() + " to DB"));
+    }
+
+    private void saveFirst10ActorsInDb(MovieCredits credits) {
+        List<Actor> cast = credits.getCast();
+        int size = cast.size();
+        int toIndex = Math.min(size, 10);
+        List<Actor> top10Actors = cast.subList(0, toIndex);
+        Box<Actor> actorsBox = boxStore.boxFor(Actor.class);
+        for (Actor actor : top10Actors) {
+            actor.getCredits().setTarget(credits);
+        }
+        actorsBox.put(top10Actors);
     }
 }

@@ -38,7 +38,7 @@
                 android:background="@color/colorPrimary"
                 android:fitsSystemWindows="true"
                 app:contentScrim="@color/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 app:scrimVisibleHeightTrigger="90dp"
                 app:titleEnabled="false"
                 app:toolbarId="@id/toolbar">
@@ -74,6 +74,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -81,6 +82,8 @@
                         android:id="@+id/toolbarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:ellipsize="marquee"
+                        android:singleLine="true"
                         android:text="@{movie.title}"
                         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                         app:fontFamily="@font/lato"

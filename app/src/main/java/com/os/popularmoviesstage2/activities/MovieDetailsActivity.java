@@ -3,6 +3,7 @@ package com.os.popularmoviesstage2.activities;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -14,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.os.popularmoviesstage2.R;
 import com.os.popularmoviesstage2.adapters.ActorsAdapter;
 import com.os.popularmoviesstage2.adapters.ActorsListItemDecoration;
@@ -23,7 +26,8 @@ import com.os.popularmoviesstage2.databinding.ActivityMovieDetailsBinding;
 import com.os.popularmoviesstage2.di.DaggerMainActivityComponent;
 import com.os.popularmoviesstage2.models.Actor;
 import com.os.popularmoviesstage2.models.Movie;
-import com.os.popularmoviesstage2.models.Video;
+import com.os.popularmoviesstage2.models.MovieCredits;
+import com.os.popularmoviesstage2.utils.MovieDetailsUtils;
 import com.os.popularmoviesstage2.viewmodels.MovieDetailsActivityViewModel;
 import com.os.popularmoviesstage2.viewmodels.MovieDetailsActivityViewModelFactory;
 import com.squareup.picasso.Picasso;
@@ -32,7 +36,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.objectbox.relation.ToMany;
 import io.reactivex.Completable;
 import io.reactivex.disposables.Disposable;
 
@@ -61,13 +64,11 @@ public class MovieDetailsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
-        toolbar = binding.toolbar;
-        setSupportActionBar(toolbar);
+        setupUi();
 
         DaggerMainActivityComponent.builder().coreComponent(((PopularMoviesS2App) getApplication()).getCoreComponent()).build().inject(this);
         viewModel = ViewModelProviders.of(this, factory).get(MovieDetailsActivityViewModel.class);
 
-        setupUi();
 
         Intent intent = getIntent();
         if (intent == null) {
@@ -83,11 +84,33 @@ public class MovieDetailsActivity extends BaseActivity {
 
         viewModel.getMovie(id).observe(this, movie -> {
             Log.d(TAG, "onCreate: got this movie: " + movie);
+            if (MovieDetailsUtils.isNullMovie(movie)) {
+                hideProgressBar();
+                showNoMovieErrorDialog();
+                return;
+            }
             bindUi(movie);
         });
     }
 
+    private void showNoMovieErrorDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .customView(R.layout.loading_error_dialog_layout, false)
+                .dismissListener(dialogInterface -> MovieDetailsActivity.this.finish())
+                .build();
+
+        dialog.getCustomView().findViewById(R.id.goBackButton).setOnClickListener(v -> {
+            dialog.dismiss();
+            MovieDetailsActivity.this.finish();
+        });
+
+        dialog.show();
+    }
+
     private void setupUi() {
+        toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -126,17 +149,18 @@ public class MovieDetailsActivity extends BaseActivity {
     }
 
     private void bindUi(Movie movie) {
-        List<Video> videos = movie.getVideos();
-        if (videos == null || videos.size() <= 0)
-            Snackbar.make(getSnackbarParent(), "Couldn't load any videos.", Snackbar.LENGTH_LONG).show();
-        else
-            youtubeVideoId = videos.get(0).getKey();
+//        List<Video> videos = movie.getVideos();
+//        if (videos == null || videos.size() <= 0)
+//            Snackbar.make(getSnackbarParent(), "Couldn't load any videos.", Snackbar.LENGTH_LONG).show();
+//        else
+//            youtubeVideoId = videos.get(0).getKey();
 
-        List<Actor> actors = movie.getActors();
+        MovieCredits credits = movie.getCredits().getTarget();
+        List<Actor> actors = credits.getCast();
         if (actors == null || actors.size() <= 0) {
             Snackbar.make(getSnackbarParent(), "Couldn't load movies cast", Snackbar.LENGTH_LONG);
         } else {
-            actorsAdapter.updateData(movie.getActors().subList(0, Math.min(actors.size(), 10)));
+            actorsAdapter.updateData(actors.subList(0, Math.min(actors.size(), 10)));
         }
 
         binding.setHandlers(this);
@@ -156,7 +180,7 @@ public class MovieDetailsActivity extends BaseActivity {
                             hideProgressBar();
                             showDetailsUi();
                         },
-                        (e) -> {
+                        e -> {
                             Log.e(TAG, "bindUi: error loading movie's poster and backdrop image, skipping layout.", e);
                             Snackbar.make(getSnackbarParent(), "Couldn't load movie details, Try again", Snackbar.LENGTH_LONG).show();
                             closeOnError();
@@ -165,7 +189,7 @@ public class MovieDetailsActivity extends BaseActivity {
     }
 
     private void closeOnError() {
-        Snackbar.make(binding.root, "Error Loading Movie Details", Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(this, "Error Loading Movie Details", Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -179,8 +203,8 @@ public class MovieDetailsActivity extends BaseActivity {
     }
 
     private void showDetailsUi() {
-        binding.appBarRoot.setVisibility(View.VISIBLE);
         binding.detailsScrollView.setVisibility(View.VISIBLE);
+        binding.appBarRoot.setVisibility(View.VISIBLE);
     }
 
     private void hideDetailsUi() {

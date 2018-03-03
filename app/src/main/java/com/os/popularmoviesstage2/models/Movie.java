@@ -5,7 +5,7 @@ import com.os.popularmoviesstage2.utils.gson.SkipSerialization;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.relation.ToMany;
+import io.objectbox.relation.ToOne;
 
 @Entity
 public class Movie {
@@ -38,17 +38,17 @@ public class Movie {
     private int voteCount;
 
     @SkipSerialization
-    private ToMany<Actor> actors;
+    private ToOne<MovieCredits> credits;
 
-    @SkipSerialization
-    private ToMany<Review> reviews;
-
-    @SkipSerialization
-    private ToMany<Video> videos;
+//    @SkipSerialization
+//    private ToMany<Review> reviews;
+//
+//    @SkipSerialization
+//    private ToMany<Video> videos;
 
     public Movie() {}
 
-    public Movie(long id, String title, String releaseDate, String posterUrl, float rating, String overview, String backDropUrl, int duration, int voteCount, ToMany<Actor> actors, ToMany<Review> reviews, ToMany<Video> videos) {
+    public Movie(long id, String title, String releaseDate, String posterUrl, float rating, String overview, String backDropUrl, int duration, int voteCount, long creditsId/*, ToMany<Review> reviews, ToMany<Video> videos*/) {
         this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;
@@ -58,9 +58,9 @@ public class Movie {
         this.backDropUrl = backDropUrl;
         this.duration = duration;
         this.voteCount = voteCount;
-        this.actors = actors;
-        this.reviews = reviews;
-        this.videos = videos;
+        this.credits.setTargetId(creditsId);
+//        this.reviews = reviews;
+//        this.videos = videos;
     }
 
     public long getId() {
@@ -135,29 +135,29 @@ public class Movie {
         this.voteCount = voteCount;
     }
 
-    public ToMany<Actor> getActors() {
-        return actors;
+    public ToOne<MovieCredits> getCredits() {
+        return credits;
     }
 
-    public void setActors(ToMany<Actor> actors) {
-        this.actors = actors;
+    public void setCredits(ToOne<MovieCredits> credits) {
+        this.credits = credits;
     }
 
-    public ToMany<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(ToMany<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public ToMany<Video> getVideos() {
-        return videos;
-    }
-
-    public void setVideos(ToMany<Video> videos) {
-        this.videos = videos;
-    }
+    //    public ToMany<Review> getReviews() {
+//        return reviews;
+//    }
+//
+//    public void setReviews(ToMany<Review> reviews) {
+//        this.reviews = reviews;
+//    }
+//
+//    public ToMany<Video> getVideos() {
+//        return videos;
+//    }
+//
+//    public void setVideos(ToMany<Video> videos) {
+//        this.videos = videos;
+//    }
 
     @Override
     public String toString() {
@@ -171,9 +171,9 @@ public class Movie {
                 ", backDropUrl='" + backDropUrl + '\'' +
                 ", duration=" + duration +
                 ", voteCount=" + voteCount +
-                ", actors=" + actors.size() +
-                ", reviews=" + reviews.size() +
-                ", videos=" + videos.size() +
+//                ", credits=" + credits.getTarget().getCast().size() +
+//                ", reviews=" + reviews.size() +
+//                ", videos=" + videos.size() +
                 '}';
     }
 }

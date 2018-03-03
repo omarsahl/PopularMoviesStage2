@@ -1,18 +1,27 @@
 package com.os.popularmoviesstage2.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.os.popularmoviesstage2.utils.gson.SkipSerialization;
 
 import java.util.List;
+
+import io.objectbox.annotation.Backlink;
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToOne;
 
 /**
  * Created by Omar on 01-Mar-18 8:28 PM
  */
 
+@Entity
 public class MovieCredits {
     @SerializedName("id")
+    @Id(assignable = true)
     private long id;
 
     @SerializedName("cast")
+    @Backlink
     private List<Actor> cast;
 
     public MovieCredits() {}

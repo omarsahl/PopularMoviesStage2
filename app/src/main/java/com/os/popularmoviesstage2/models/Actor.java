@@ -1,9 +1,11 @@
 package com.os.popularmoviesstage2.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.os.popularmoviesstage2.utils.gson.SkipSerialization;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToOne;
 
 /**
  * Created by Omar on 01-Mar-18 8:04 PM
@@ -27,14 +29,18 @@ public class Actor {
     @SerializedName("order")
     private int order;
 
+    @SkipSerialization
+    private ToOne<MovieCredits> credits;
+
     public Actor() {}
 
-    public Actor(long id, String character, String name, String profileImage, int order) {
+    public Actor(long id, String character, String name, String profileImage, int order, long creditsId) {
         this.id = id;
         this.character = character;
         this.name = name;
         this.profileImage = profileImage;
         this.order = order;
+        this.credits.setTargetId(creditsId);
     }
 
     public int getOrder() {
@@ -75,5 +81,13 @@ public class Actor {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public ToOne<MovieCredits> getCredits() {
+        return credits;
+    }
+
+    public void setCredits(ToOne<MovieCredits> credits) {
+        this.credits = credits;
     }
 }

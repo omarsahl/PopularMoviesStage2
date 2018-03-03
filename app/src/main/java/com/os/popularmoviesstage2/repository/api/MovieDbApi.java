@@ -2,9 +2,9 @@ package com.os.popularmoviesstage2.repository.api;
 
 import com.os.popularmoviesstage2.models.Movie;
 import com.os.popularmoviesstage2.models.MovieCredits;
+import com.os.popularmoviesstage2.models.MovieReviews;
 import com.os.popularmoviesstage2.models.MovieVideos;
 import com.os.popularmoviesstage2.models.MoviesPage;
-import com.os.popularmoviesstage2.models.ReviewsContainer;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -24,7 +24,7 @@ public interface MovieDbApi {
     Observable<MovieVideos> getMovieVideos(@Path("id") long id);
 
     @GET("movie/{id}/reviews")
-    Observable<ReviewsContainer> getMovieReviews(@Path("id") long id);
+    Observable<MovieReviews> getMovieReviews(@Path("id") long id);
 
     @GET("movie/{id}/credits")
     Observable<MovieCredits> getMovieCredits(@Path("id") long id);

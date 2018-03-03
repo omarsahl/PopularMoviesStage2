@@ -39,6 +39,7 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
 
     @Override
     public int getItemCount() {
+        if (actors == null) return 0;
         return actors.size();
     }
 
