@@ -1,4 +1,4 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.appmodule;
 
 import android.content.Context;
 
@@ -71,7 +71,7 @@ public class NetworkModule {
                         throw new NoNetworkException("No Network Connection");
                     }
                 })
-//                .retryOnConnectionFailure(true)
+                .retryOnConnectionFailure(true)
                 .build();
     }
 

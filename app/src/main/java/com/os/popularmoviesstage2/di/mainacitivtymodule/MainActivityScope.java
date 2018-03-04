@@ -1,4 +1,4 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.mainacitivtymodule;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

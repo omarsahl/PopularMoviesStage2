@@ -1,10 +1,9 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.appmodule;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.os.popularmoviesstage2.BuildConfig;
-import com.os.popularmoviesstage2.app.PopularMoviesS2App;
 import com.os.popularmoviesstage2.models.MyObjectBox;
 
 import javax.inject.Singleton;

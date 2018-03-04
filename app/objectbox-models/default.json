@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:4212555980230108352",
-      "lastPropertyId": "10:7572837811617768471",
+      "lastPropertyId": "12:916236416160517758",
       "name": "Movie",
       "properties": [
         {
@@ -48,6 +48,16 @@
           "id": "10:7572837811617768471",
           "indexId": "1:4574642724074946796",
           "name": "creditsId"
+        },
+        {
+          "id": "11:5742004389498058162",
+          "indexId": "3:7821700125579895957",
+          "name": "reviewsId"
+        },
+        {
+          "id": "12:916236416160517758",
+          "indexId": "5:472369892698107553",
+          "name": "videosId"
         }
       ],
       "relations": []
@@ -115,7 +125,7 @@
     },
     {
       "id": "5:3080134065043243703",
-      "lastPropertyId": "6:8851998602713769251",
+      "lastPropertyId": "7:5570404279705663497",
       "name": "Review",
       "properties": [
         {
@@ -137,13 +147,18 @@
         {
           "id": "6:8851998602713769251",
           "name": "id"
+        },
+        {
+          "id": "7:5570404279705663497",
+          "indexId": "4:777161819668291321",
+          "name": "reviewsId"
         }
       ],
       "relations": []
     },
     {
       "id": "6:171769271367706932",
-      "lastPropertyId": "7:8907250980757329764",
+      "lastPropertyId": "8:3686262440837100751",
       "name": "Video",
       "properties": [
         {
@@ -173,6 +188,11 @@
         {
           "id": "7:8907250980757329764",
           "name": "type"
+        },
+        {
+          "id": "8:3686262440837100751",
+          "indexId": "6:6458821369922485870",
+          "name": "movieVideosId"
         }
       ],
       "relations": []
@@ -188,10 +208,46 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "8:3428351692880003324",
+      "lastPropertyId": "4:3780943347237120075",
+      "name": "MovieReviews",
+      "properties": [
+        {
+          "id": "1:9193626184975293553",
+          "name": "id"
+        },
+        {
+          "id": "2:4642014906327992948",
+          "name": "page"
+        },
+        {
+          "id": "3:3459390254394577308",
+          "name": "pagesCount"
+        },
+        {
+          "id": "4:3780943347237120075",
+          "name": "reviewsCount"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:7135405597011701040",
+      "lastPropertyId": "1:5959235285319235178",
+      "name": "MovieVideos",
+      "properties": [
+        {
+          "id": "1:5959235285319235178",
+          "name": "id"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:4765389046504038797",
-  "lastIndexId": "2:1483407974067684859",
+  "lastEntityId": "9:7135405597011701040",
+  "lastIndexId": "6:6458821369922485870",
   "lastRelationId": "4:7384177546737547912",
   "lastSequenceId": "0:0",
   "modelVersion": 4,

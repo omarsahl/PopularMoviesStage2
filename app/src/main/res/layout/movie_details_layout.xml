@@ -9,6 +9,10 @@
         <import type="com.os.popularmoviesstage2.utils.MovieDetailsUtils" />
 
         <variable
+            name="handlers"
+            type="com.os.popularmoviesstage2.activities.MovieDetailsActivity" />
+
+        <variable
             name="movie"
             type="com.os.popularmoviesstage2.models.Movie" />
     </data>
@@ -27,11 +31,11 @@
             android:adjustViewBounds="true"
             android:contentDescription='@{movie.title + " Movie Poster"}'
             android:scaleType="centerCrop"
-            tools:src="@drawable/poster_placeholder"
             app:layout_constraintEnd_toStartOf="@+id/movieTitle"
             app:layout_constraintHorizontal_weight="0.7"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/poster_placeholder" />
 
         <TextView
             android:id="@+id/movieTitle"
@@ -40,8 +44,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:maxLines="3"
             android:ellipsize="end"
+            android:maxLines="3"
             android:text='@{movie.title}'
             android:textColor="@color/white"
             android:textSize="28sp"
@@ -138,6 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:onClick="@{handlers::onClickAddToFavorites}"
             android:paddingBottom="12dp"
             android:paddingLeft="18dp"
             android:paddingRight="18dp"
@@ -150,20 +155,21 @@
             fancy:fb_fontIconResource="&#xf004;"
             fancy:fb_iconPosition="left"
             fancy:fb_radius="30dp"
-            fancy:fb_text="ADD TO FAVORITES"
+            fancy:fb_text="@string/add_to_favorites"
             fancy:fb_textColor="#FFFFFF" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/overViewLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="28dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/overview_label"
             android:textAllCaps="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorPrimaryExtraLight"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:fontFamily="@font/lato"
             app:layout_constraintEnd_toEndOf="parent"
@@ -190,7 +196,7 @@
             android:id="@+id/actorsListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             android:background="@color/colorPrimaryLight"
             android:orientation="vertical"
             android:paddingBottom="16dp"
@@ -204,12 +210,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:text="@string/actors_label"
                 android:textAllCaps="true"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorPrimaryExtraLight"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:fontFamily="@font/lato" />
 
@@ -217,20 +225,22 @@
                 android:id="@+id/actorsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
                 android:scrollbars="horizontal" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/reviewsLabel"
+            android:id="@+id/videoLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="36dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="@string/reviews_label"
+            android:text="@string/videos_label"
             android:textAllCaps="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorPrimaryExtraLight"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:fontFamily="@font/lato"
             app:layout_constraintEnd_toEndOf="parent"
@@ -238,10 +248,39 @@
             app:layout_constraintTop_toBottomOf="@id/actorsListContainer" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/videosList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:scrollbars="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoLabel" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/reviewsLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/reviews_label"
+            android:textAllCaps="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimaryExtraLight"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:fontFamily="@font/lato"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/videosList" />
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/reviewsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
+            android:scrollbars="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reviewsLabel" />

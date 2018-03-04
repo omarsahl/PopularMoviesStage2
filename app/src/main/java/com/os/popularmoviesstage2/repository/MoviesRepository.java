@@ -8,8 +8,12 @@ import com.os.popularmoviesstage2.models.Movie;
 import com.os.popularmoviesstage2.models.MovieCredits;
 import com.os.popularmoviesstage2.models.MoviePreview;
 import com.os.popularmoviesstage2.models.MoviePreview_;
+import com.os.popularmoviesstage2.models.MovieReviews;
+import com.os.popularmoviesstage2.models.MovieVideos;
 import com.os.popularmoviesstage2.models.Movie_;
 import com.os.popularmoviesstage2.models.MoviesPage;
+import com.os.popularmoviesstage2.models.Review;
+import com.os.popularmoviesstage2.models.Video;
 import com.os.popularmoviesstage2.repository.api.MovieDbApi;
 import com.os.popularmoviesstage2.utils.MovieDetailsUtils;
 
@@ -137,20 +141,13 @@ public class MoviesRepository {
     private Observable<Movie> getMovieDetailsFromApi(long id) {
         return Observable.zip(
                 movieApi.getMovie(id),
-                movieApi.getMovieVideos(id),
+                movieApi.getMovieVideos(id).doOnNext(this::saveVideoToDb),
                 movieApi.getMovieCredits(id).doOnNext(this::saveCreditsToDb),
-                movieApi.getMovieReviews(id),
+                movieApi.getMovieReviews(id).doOnNext(this::saveReviewsToDb),
                 (movie, movieVideos, movieCredits, movieReviews) -> {
-//                    // workaround for this exception "io.objectbox.exception.DbDetachedException: Cannot resolve relation for detached entities"
-//                    // just for now.
-//                    // -------------------
-//                    Box<Movie> movieBox = boxStore.boxFor(Movie.class);
-//                    movieBox.attach(movie);
-//                    // -------------------
-
                     movie.getCredits().setTarget(movieCredits);
-//                        movie.getVideos().addAll(movieVideos.getResults());
-//                        movie.getReviews().addAll(movieReviews.getReviews());
+                    movie.getReviews().setTarget(movieReviews);
+                    movie.getVideos().setTarget(movieVideos);
 
                     return movie;
                 }).doOnNext(this::saveMovieToDb);
@@ -180,7 +177,7 @@ public class MoviesRepository {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .doOnError((e) -> Log.e(TAG, "saveCreditsToDb: Couldn't save credits and cast to DB", e))
-                .subscribe(() -> Log.d(TAG, "saveCreditsToDb: Saved " + credits.getId() + " to DB"));
+                .subscribe(() -> Log.d(TAG, "saveCreditsToDb: Saved actors to DB"));
     }
 
     private void saveFirst10ActorsInDb(MovieCredits credits) {
@@ -193,5 +190,41 @@ public class MoviesRepository {
             actor.getCredits().setTarget(credits);
         }
         actorsBox.put(top10Actors);
+    }
+
+    private void saveReviewsToDb(MovieReviews movieReviews) {
+        Completable.fromAction(() -> {
+            saveFirst10ReviewsInDb(movieReviews);
+            boxStore.boxFor(MovieReviews.class).put(movieReviews);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .doOnError(e -> Log.e(TAG, "saveReviewsToDb: Couldn't save reviews in DB", e))
+                .subscribe(() -> Log.d(TAG, "saveReviewsToDb: Saved reviews to DB"));
+    }
+
+    private void saveFirst10ReviewsInDb(MovieReviews movieReviews) {
+        List<Review> reviews = movieReviews.getReviews();
+        int size = reviews.size();
+        int toIndex = Math.min(size, 10);
+        List<Review> top10Reviews = reviews.subList(0, toIndex);
+        Box<Review> reviewBox = boxStore.boxFor(Review.class);
+        for (Review review : top10Reviews) {
+            review.getReviews().setTarget(movieReviews);
+        }
+        reviewBox.put(top10Reviews);
+    }
+
+    private void saveVideoToDb(MovieVideos movieVideos) {
+        List<Video> videos = movieVideos.getResults();
+        Completable.fromAction(() -> {
+            for (Video video : videos) {
+                video.getMovieVideos().setTarget(movieVideos);
+            }
+            boxStore.boxFor(Video.class).put(videos);
+            boxStore.boxFor(MovieVideos.class).put(movieVideos);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .doOnError((e) -> Log.e(TAG, "saveVideoToDb: Couldn't save videos to DB", e))
+                .subscribe(() -> Log.d(TAG, "saveVideoToDb: Saved " + videos.size() + " videos to DB"));
     }
 }

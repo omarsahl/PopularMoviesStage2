@@ -41,6 +41,6 @@ public class TopRatedMoviesFragmentViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         Log.d(TAG, "Clearing TopRatedMoviesFragmentViewModel data");
-        compositeDisposable.clear();
+        if (compositeDisposable != null) compositeDisposable.clear();
     }
 }

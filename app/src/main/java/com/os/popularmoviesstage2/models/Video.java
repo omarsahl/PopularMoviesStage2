@@ -1,9 +1,11 @@
 package com.os.popularmoviesstage2.models;
 
+import com.google.gson.annotations.SerializedName;
 import com.os.popularmoviesstage2.utils.gson.SkipSerialization;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToOne;
 
 /**
  * Created by Omar on 22-Feb-18 9:53 PM
@@ -14,6 +16,8 @@ public class Video {
     @Id
     @SkipSerialization
     private long id;
+
+    @SerializedName("id")
     private String strId;
     private String key;
     private String name;
@@ -21,9 +25,12 @@ public class Video {
     private int size;
     private String type;
 
+    @SkipSerialization
+    private ToOne<MovieVideos> movieVideos;
+
     public Video() {}
 
-    public Video(long id, String strId, String key, String name, String site, int size, String type) {
+    public Video(long id, String strId, String key, String name, String site, int size, String type, long movieVideosId) {
         this.id = id;
         this.strId = strId;
         this.key = key;
@@ -31,6 +38,7 @@ public class Video {
         this.site = site;
         this.size = size;
         this.type = type;
+        this.movieVideos.setTargetId(movieVideosId);
     }
 
     public long getId() {
@@ -87,5 +95,13 @@ public class Video {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public ToOne<MovieVideos> getMovieVideos() {
+        return movieVideos;
+    }
+
+    public void setMovieVideos(ToOne<MovieVideos> movieVideos) {
+        this.movieVideos = movieVideos;
     }
 }

@@ -1,4 +1,4 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.appmodule;
 
 import javax.inject.Qualifier;
 

@@ -5,6 +5,7 @@ import com.os.popularmoviesstage2.utils.gson.SkipSerialization;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.relation.ToOne;
 
 /**
  * Created by Omar on 25-Feb-18 5:59 PM
@@ -28,14 +29,18 @@ public class Review {
     @SerializedName("url")
     private String url;
 
+    @SkipSerialization
+    private ToOne<MovieReviews> reviews;
+
     public Review() {}
 
-    public Review(long id, String strId, String author, String content, String url) {
+    public Review(long id, String strId, String author, String content, String url, long reviewsId) {
         this.id = id;
         this.strId = strId;
         this.author = author;
         this.content = content;
         this.url = url;
+        this.reviews.setTargetId(reviewsId);
     }
 
     public String getStrId() {
@@ -76,5 +81,13 @@ public class Review {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public ToOne<MovieReviews> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ToOne<MovieReviews> reviews) {
+        this.reviews = reviews;
     }
 }

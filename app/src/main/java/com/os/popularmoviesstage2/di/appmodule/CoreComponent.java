@@ -1,6 +1,6 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.appmodule;
 
-import com.os.popularmoviesstage2.activities.MainActivity;
+import com.os.popularmoviesstage2.app.App;
 import com.os.popularmoviesstage2.repository.MoviesRepository;
 import com.os.popularmoviesstage2.repository.api.MovieDbApi;
 
@@ -16,6 +16,8 @@ import io.objectbox.BoxStore;
 @Singleton
 @Component(modules = {AppModule.class, NetworkModule.class, ObjectBoxModule.class})
 public interface CoreComponent {
+    App getApp();
+
     MovieDbApi getMovieDbApi();
 
     BoxStore getBoxStore();

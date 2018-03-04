@@ -7,6 +7,7 @@
     <color name="colorPrimaryRipple">#64212234</color>
     <color name="colorPrimaryLight">#1E2634</color>
     <color name="colorPrimaryExtraLight">#646c81</color>
+    <color name="colorAccentLight">#64f3be11</color>
 
     <color name="transparent">#00000000</color>
     <color name="gray">#4b4b4b</color>

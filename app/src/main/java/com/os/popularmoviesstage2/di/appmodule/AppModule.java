@@ -1,6 +1,8 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.appmodule;
 
 import android.content.Context;
+
+import com.os.popularmoviesstage2.app.App;
 
 import javax.inject.Singleton;
 
@@ -12,11 +14,14 @@ import dagger.Provides;
  */
 
 @Module
+@Singleton
 public class AppModule {
     private Context context;
+    private App app;
 
-    public AppModule(Context context) {
+    public AppModule(App app, Context context) {
         this.context = context;
+        this.app = app;
     }
 
     @Provides
@@ -24,5 +29,11 @@ public class AppModule {
     @ApplicationContext
     public Context provideContext() {
         return context;
+    }
+
+    @Provides
+    @Singleton
+    public App provideApp() {
+        return app;
     }
 }

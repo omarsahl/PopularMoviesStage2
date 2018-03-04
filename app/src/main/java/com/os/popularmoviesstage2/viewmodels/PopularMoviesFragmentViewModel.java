@@ -19,6 +19,7 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class PopularMoviesFragmentViewModel extends ViewModel {
     private static final String TAG = PopularMoviesFragmentViewModel.class.getSimpleName();
+
     private MoviesRepository moviesRepository;
     private CompositeDisposable compositeDisposable;
     private MutableLiveData<List<MoviePreview>> popularMovies;
@@ -43,6 +44,6 @@ public class PopularMoviesFragmentViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         Log.d(TAG, "Clearing PopularMoviesFragmentViewModel data");
-        compositeDisposable.clear();
+        if (compositeDisposable != null) compositeDisposable.clear();
     }
 }

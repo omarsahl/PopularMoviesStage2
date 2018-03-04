@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="handlers"
+            type="com.os.popularmoviesstage2.adapters.VideosAdapter.VideoViewHolder" />
+
+        <variable
+            name="video"
+            type="com.os.popularmoviesstage2.models.Video" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/accent_color_ripple"
+        android:onClick="@{handlers::openVideo}"
+        android:orientation="vertical"
+        app:cardUseCompatPadding="true">
+
+        <ImageView
+            android:id="@+id/videoThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/video_thumbnail_ph" />
+
+        <ImageView
+            android:id="@+id/playTrailer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/play_trailer_description"
+            app:layout_collapseMode="parallax"
+            app:srcCompat="@drawable/ic_play_circle_filled_small" />
+    </FrameLayout>
+</layout>

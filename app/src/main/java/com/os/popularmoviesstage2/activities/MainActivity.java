@@ -16,15 +16,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.os.popularmoviesstage2.R;
+import com.os.popularmoviesstage2.fragments.FavoriteMoviesFragment;
 import com.os.popularmoviesstage2.fragments.MoviesListBaseFragment;
 import com.os.popularmoviesstage2.fragments.PopularMoviesFragment;
 import com.os.popularmoviesstage2.fragments.TopRatedMoviesFragment;
 import com.os.popularmoviesstage2.models.MoviePreview;
 
-public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MoviesListBaseFragment.OnMoviesSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MoviesListBaseFragment.OnMoviesSelectedListener, FavoriteMoviesFragment.OnFavoriteMoviesFragmentInteractionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String FRAGMENT_TAG_POPULAR = PopularMoviesFragment.class.getSimpleName();
     private static final String FRAGMENT_TAG_TOP_RATED = TopRatedMoviesFragment.class.getSimpleName();
+    private static final String FRAGMENT_TAG_FAVORITES = FavoriteMoviesFragment.class.getSimpleName();
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
@@ -70,6 +72,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 transaction.replace(R.id.fragmentContainer, fragmentTopRated, FRAGMENT_TAG_TOP_RATED);
                 break;
             case R.id.action_favorites:
+                FavoriteMoviesFragment fragmentFavorites = (FavoriteMoviesFragment) fragmentManager.findFragmentByTag(FRAGMENT_TAG_FAVORITES);
+                if (fragmentFavorites == null) fragmentFavorites = new FavoriteMoviesFragment();
+                transaction.replace(R.id.fragmentContainer, fragmentFavorites, FRAGMENT_TAG_FAVORITES);
                 break;
         }
         transaction.commit();
@@ -86,5 +91,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         Intent intent = new Intent(this, MovieDetailsActivity.class);
         intent.putExtra(MovieDetailsActivity.MOVIE_EXTRA_KEY, movie.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onFavoriteMovieClicked(MoviePreview movie) {
+        onMovieSelected(movie);
     }
 }

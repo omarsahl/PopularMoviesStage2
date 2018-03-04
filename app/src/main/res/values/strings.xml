@@ -17,4 +17,9 @@
     <string name="actors_label">credits</string>
     <string name="reviews_label">reviews</string>
     <string name="about_movie_label">about movie</string>
+    <string name="textview_ellipsize_text"> … see more</string>
+
+    <string name="add_to_favorites">ADD TO FAVORITES</string>
+    <string name="remove_from_favorites">REMOVE FROM FAVORITES</string>
+    <string name="videos_label">videos</string>
 </resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="handlers"
+            type="com.os.popularmoviesstage2.adapters.ReviewsAdapter.ReviewViewHolder" />
+
+        <variable
+            name="review"
+            type="com.os.popularmoviesstage2.models.Review" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/accent_color_ripple"
+        android:onClick="@{handlers::openFullReview}"
+        app:cardBackgroundColor="@color/colorPrimaryLight"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="18dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/authorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:paddingBottom="8dp"
+                android:singleLine="true"
+                android:text="@{review.author}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                app:fontFamily="@font/lato"
+                tools:text="Omar Sahl" />
+
+            <com.dinuscxj.ellipsize.EllipsizeTextView
+                android:id="@+id/reviewContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="7"
+                android:text="@{review.content}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textColor="@color/white"
+                app:fontFamily="@font/lato"
+                tools:text="Summertime 2016 has not been very kind to DC Comics-based personalities looking to shine consistently like their big screen Marvel Comics counterparts. " />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>

@@ -22,6 +22,7 @@ public final class FavoriteMoviesDbContract {
 
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_TITLE = "title";
+        public static final String COLUMN_NAME_TIMESTAMP = "timeStamp";
         public static final String COLUMN_NAME_BACKDROP_URL = "backDropUrl";
     }
 }

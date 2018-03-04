@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.os.popularmoviesstage2.app.PopularMoviesS2App;
-import com.os.popularmoviesstage2.di.DaggerMainActivityComponent;
+import com.os.popularmoviesstage2.app.App;
+import com.os.popularmoviesstage2.di.mainacitivtymodule.DaggerMainActivityComponent;
 import com.os.popularmoviesstage2.models.MoviePreview;
 import com.os.popularmoviesstage2.viewmodels.PopularMoviesFragmentViewModel;
 import com.os.popularmoviesstage2.viewmodels.PopularMoviesFragmentViewModelFactory;
@@ -25,7 +25,7 @@ public class PopularMoviesFragment extends MoviesListBaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        DaggerMainActivityComponent.builder().coreComponent(((PopularMoviesS2App) getActivity().getApplication()).getCoreComponent()).build().inject(this);
+        DaggerMainActivityComponent.builder().coreComponent(((App) getActivity().getApplication()).getCoreComponent()).build().inject(this);
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(PopularMoviesFragmentViewModel.class);
 
         viewModel.getPopularMovies().observe(this, movies -> {

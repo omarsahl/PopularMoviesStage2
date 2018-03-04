@@ -9,7 +9,7 @@ import com.os.popularmoviesstage2.models.Movie;
  */
 
 public final class MovieDetailsUtils {
-    private static final Movie NULL_MOVIE = new Movie(-1L, null, null, null, -1f, null, null, -1, -1, -1L);
+    private static final Movie NULL_MOVIE = new Movie(-1L, null, null, null, -1f, null, null, -1, -1, -1L, -1L, -1L);
 
     private MovieDetailsUtils() {}
 

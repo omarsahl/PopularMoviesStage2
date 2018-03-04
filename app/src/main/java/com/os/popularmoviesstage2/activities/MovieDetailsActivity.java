@@ -3,7 +3,6 @@ package com.os.popularmoviesstage2.activities;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -21,29 +20,40 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.os.popularmoviesstage2.R;
 import com.os.popularmoviesstage2.adapters.ActorsAdapter;
 import com.os.popularmoviesstage2.adapters.ActorsListItemDecoration;
-import com.os.popularmoviesstage2.app.PopularMoviesS2App;
+import com.os.popularmoviesstage2.adapters.ReviewsAdapter;
+import com.os.popularmoviesstage2.adapters.VideosAdapter;
+import com.os.popularmoviesstage2.app.App;
 import com.os.popularmoviesstage2.databinding.ActivityMovieDetailsBinding;
-import com.os.popularmoviesstage2.di.DaggerMainActivityComponent;
+import com.os.popularmoviesstage2.di.mainacitivtymodule.DaggerMainActivityComponent;
 import com.os.popularmoviesstage2.models.Actor;
 import com.os.popularmoviesstage2.models.Movie;
 import com.os.popularmoviesstage2.models.MovieCredits;
+import com.os.popularmoviesstage2.models.MovieReviews;
+import com.os.popularmoviesstage2.models.MovieVideos;
+import com.os.popularmoviesstage2.models.Review;
+import com.os.popularmoviesstage2.models.Video;
 import com.os.popularmoviesstage2.utils.MovieDetailsUtils;
 import com.os.popularmoviesstage2.viewmodels.MovieDetailsActivityViewModel;
 import com.os.popularmoviesstage2.viewmodels.MovieDetailsActivityViewModelFactory;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
+import mehdi.sakout.fancybuttons.FancyButton;
 
-public class MovieDetailsActivity extends BaseActivity {
+public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter.OnReviewClickListener, VideosAdapter.OnVideoSelectedListener {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
 
     private static final int TOOLBAR_TITLE_VISIBILITY_THRESHOLD = 20; // 20px
     private static final int DEFAULT_SCRIM_ANIMATION_DURATION = 400;
+    private static final int MAX_CAST_SIZE = 10;
+    private static final int MAX_REVIEWS_SIZE = 10;
+
     public static final String MOVIE_EXTRA_KEY = "movieExtra";
 
     private ActivityMovieDetailsBinding binding;
@@ -55,18 +65,23 @@ public class MovieDetailsActivity extends BaseActivity {
     private MovieDetailsActivityViewModel viewModel;
 
     private ActorsAdapter actorsAdapter;
+    private ReviewsAdapter reviewsAdapter;
+    private VideosAdapter videosAdapter;
 
     private String youtubeVideoId;
 
-    private Disposable disposable;
+    private CompositeDisposable disposable;
+    private Movie movie;
+    private boolean isMovieInFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        disposable = new CompositeDisposable();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
         setupUi();
 
-        DaggerMainActivityComponent.builder().coreComponent(((PopularMoviesS2App) getApplication()).getCoreComponent()).build().inject(this);
+        DaggerMainActivityComponent.builder().coreComponent(((App) getApplication()).getCoreComponent()).build().inject(this);
         viewModel = ViewModelProviders.of(this, factory).get(MovieDetailsActivityViewModel.class);
 
 
@@ -77,7 +92,7 @@ public class MovieDetailsActivity extends BaseActivity {
         }
 
         long id = intent.getLongExtra(MOVIE_EXTRA_KEY, -1L);
-        if (id == -1) {
+        if (id == -1L) {
             closeOnError();
             return;
         }
@@ -91,20 +106,12 @@ public class MovieDetailsActivity extends BaseActivity {
             }
             bindUi(movie);
         });
-    }
 
-    private void showNoMovieErrorDialog() {
-        MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .customView(R.layout.loading_error_dialog_layout, false)
-                .dismissListener(dialogInterface -> MovieDetailsActivity.this.finish())
-                .build();
-
-        dialog.getCustomView().findViewById(R.id.goBackButton).setOnClickListener(v -> {
-            dialog.dismiss();
-            MovieDetailsActivity.this.finish();
+        viewModel.getIsMovieInFavorites().observe(this, isInFavorites -> {
+            Log.d(TAG, "onCreate: movie is in favorites? " + isInFavorites);
+            isMovieInFavorites = isInFavorites;
+            adjustAddToFavoritesButton(isInFavorites);
         });
-
-        dialog.show();
     }
 
     private void setupUi() {
@@ -141,33 +148,68 @@ public class MovieDetailsActivity extends BaseActivity {
 
         actorsAdapter = new ActorsAdapter(this);
         RecyclerView actorsList = binding.movieDetailsLayout.actorsList;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        actorsList.setLayoutManager(layoutManager);
+        LinearLayoutManager actorsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        actorsList.setLayoutManager(actorsLayoutManager);
+        actorsList.setNestedScrollingEnabled(true);
         actorsList.addItemDecoration(new ActorsListItemDecoration(25));
         actorsList.setHasFixedSize(true);
         actorsList.setAdapter(actorsAdapter);
+
+        reviewsAdapter = new ReviewsAdapter(this, this);
+        RecyclerView reviewsList = binding.movieDetailsLayout.reviewsList;
+        LinearLayoutManager reviewsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        reviewsList.setNestedScrollingEnabled(true);
+        reviewsList.setLayoutManager(reviewsLayoutManager);
+        reviewsList.setHasFixedSize(true);
+        reviewsList.setAdapter(reviewsAdapter);
+
+        videosAdapter = new VideosAdapter(this, this);
+        RecyclerView videosList = binding.movieDetailsLayout.videosList;
+        videosList.setNestedScrollingEnabled(true);
+        LinearLayoutManager videosLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        videosList.addItemDecoration(new ActorsListItemDecoration(30));
+        videosList.setLayoutManager(videosLayoutManager);
+        videosList.setHasFixedSize(true);
+        videosList.setAdapter(videosAdapter);
+
     }
 
     private void bindUi(Movie movie) {
-//        List<Video> videos = movie.getVideos();
-//        if (videos == null || videos.size() <= 0)
-//            Snackbar.make(getSnackbarParent(), "Couldn't load any videos.", Snackbar.LENGTH_LONG).show();
-//        else
-//            youtubeVideoId = videos.get(0).getKey();
+        MovieVideos movieVideos = movie.getVideos().getTarget();
+        List<Video> videos = movieVideos.getResults();
+        if (videos == null || videos.size() <= 0) {
+            Snackbar.make(getSnackbarParent(), "Couldn't load any videos.", Snackbar.LENGTH_LONG).show();
+        } else {
+            videosAdapter.updateData(videos);
+            youtubeVideoId = videos.get(0).getKey();
+        }
 
         MovieCredits credits = movie.getCredits().getTarget();
         List<Actor> actors = credits.getCast();
         if (actors == null || actors.size() <= 0) {
-            Snackbar.make(getSnackbarParent(), "Couldn't load movies cast", Snackbar.LENGTH_LONG);
+            Snackbar.make(getSnackbarParent(), "Couldn't load movie cast", Snackbar.LENGTH_LONG);
         } else {
-            actorsAdapter.updateData(actors.subList(0, Math.min(actors.size(), 10)));
+            List<Actor> list = actors.subList(0, Math.min(actors.size(), MAX_CAST_SIZE));
+            Collections.sort(list, (o1, o2) -> o1.getOrder() - o2.getOrder());
+            actorsAdapter.updateData(list);
         }
+
+        MovieReviews movieReviews = movie.getReviews().getTarget();
+        List<Review> reviews = movieReviews.getReviews();
+        if (reviews == null || reviews.size() <= 0) {
+            Snackbar.make(getSnackbarParent(), "Couldn't load movie reviews", Snackbar.LENGTH_LONG);
+        } else {
+            List<Review> list = reviews.subList(0, Math.min(reviews.size(), MAX_REVIEWS_SIZE));
+            reviewsAdapter.updateData(list);
+        }
+
 
         binding.setHandlers(this);
         binding.setMovie(movie);
+        this.movie = movie;
 
 
-        disposable = Completable.mergeArray(
+        disposable.add(Completable.mergeArray(
                 Completable.fromAction(() -> Picasso.with(MovieDetailsActivity.this)
                         .load(getString(R.string.movies_db_poster_base_url_backdrop_w780) + movie.getBackDropUrl())
                         .into(binding.movieBackdrop)),
@@ -185,7 +227,33 @@ public class MovieDetailsActivity extends BaseActivity {
                             Snackbar.make(getSnackbarParent(), "Couldn't load movie details, Try again", Snackbar.LENGTH_LONG).show();
                             closeOnError();
                         }
-                );
+                )
+        );
+    }
+
+    private void adjustAddToFavoritesButton(Boolean isInFavorites) {
+        FancyButton favoritesButton = binding.movieDetailsLayout.addToFavoriteButton;
+        if (isInFavorites) {
+            favoritesButton.setText(getString(R.string.remove_from_favorites));
+            favoritesButton.setIconResource("\uf00d");
+        } else {
+            favoritesButton.setText(getString(R.string.add_to_favorites));
+            favoritesButton.setIconResource("\uf004");
+        }
+    }
+
+    private void showNoMovieErrorDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .customView(R.layout.loading_error_dialog_layout, false)
+                .dismissListener(dialogInterface -> MovieDetailsActivity.this.finish())
+                .build();
+
+        dialog.getCustomView().findViewById(R.id.goBackButton).setOnClickListener(v -> {
+            dialog.dismiss();
+            MovieDetailsActivity.this.finish();
+        });
+
+        dialog.show();
     }
 
     private void closeOnError() {
@@ -235,13 +303,40 @@ public class MovieDetailsActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        if (disposable != null && !disposable.isDisposed()) disposable.dispose();
-        super.onDestroy();
+    protected View getSnackbarParent() {
+        return findViewById(R.id.root);
     }
 
     @Override
-    protected View getSnackbarParent() {
-        return findViewById(R.id.root);
+    public void onReviewClicked(Review review) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(review.getUrl()));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Snackbar.make(getSnackbarParent(), "No app found to handle this request", Snackbar.LENGTH_SHORT);
+        }
+    }
+
+    public void onClickAddToFavorites(View v) {
+        if (isMovieInFavorites) {
+            viewModel.removeMovieFromFavorites(movie);
+            Snackbar.make(getSnackbarParent(), "Removed from favorites", Snackbar.LENGTH_LONG).show();
+        } else {
+            viewModel.addMovieToFavorites(movie);
+            Snackbar.make(getSnackbarParent(), "Added to favorites", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onVideoSelected(Video video) {
+        openTrailerOnYouTube(this, video.getKey());
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (disposable != null && !disposable.isDisposed()) disposable.clear();
+        super.onDestroy();
     }
 }

@@ -1,9 +1,10 @@
-package com.os.popularmoviesstage2.di;
+package com.os.popularmoviesstage2.di.mainacitivtymodule;
 
 import com.os.popularmoviesstage2.activities.MovieDetailsActivity;
+import com.os.popularmoviesstage2.di.appmodule.CoreComponent;
+import com.os.popularmoviesstage2.fragments.FavoriteMoviesFragment;
 import com.os.popularmoviesstage2.fragments.PopularMoviesFragment;
 import com.os.popularmoviesstage2.fragments.TopRatedMoviesFragment;
-import com.os.popularmoviesstage2.viewmodels.MovieDetailsActivityViewModelFactory;
 
 import dagger.Component;
 
@@ -18,5 +19,8 @@ public interface MainActivityComponent {
 
     void inject(TopRatedMoviesFragment fragment);
 
+    void inject(FavoriteMoviesFragment fragment);
+
     void inject(MovieDetailsActivity activity);
+
 }

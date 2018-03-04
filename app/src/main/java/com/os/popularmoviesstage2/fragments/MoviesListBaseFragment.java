@@ -3,6 +3,7 @@ package com.os.popularmoviesstage2.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,7 +19,6 @@ import com.os.popularmoviesstage2.models.MoviePreview;
 public abstract class MoviesListBaseFragment extends Fragment implements MoviesAdapter.OnMovieClickListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = MoviesListBaseFragment.class.getSimpleName();
     protected static final String CURRENT_LIST_POS_KEY = "currentListPos";
-    protected int currentPos;
     protected OnMoviesSelectedListener mListener;
     protected RecyclerView moviesRecyclerView;
     protected MoviesAdapter adapter;
@@ -28,7 +28,7 @@ public abstract class MoviesListBaseFragment extends Fragment implements MoviesA
     public MoviesListBaseFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_movies_list_base, container, false);
 
         boolean isInPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
@@ -39,7 +39,6 @@ public abstract class MoviesListBaseFragment extends Fragment implements MoviesA
         layoutManager = new GridLayoutManager(getActivity(), spanCount, GridLayoutManager.VERTICAL, false);
         moviesRecyclerView.setLayoutManager(layoutManager);
         moviesRecyclerView.setAdapter(adapter);
-//        moviesRecyclerView.addItemDecoration(new ActorsListItemDecoration(10));
 
         refreshLayout = root.findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(this);

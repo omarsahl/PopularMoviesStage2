@@ -26,8 +26,8 @@ public class ActorsAdapter extends RecyclerView.Adapter<ActorsAdapter.ActorsView
 
     @Override
     public ActorsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        ActorListItemBinding itemBinding = ActorListItemBinding.inflate(layoutInflater, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        ActorListItemBinding itemBinding = ActorListItemBinding.inflate(inflater, parent, false);
         return new ActorsViewHolder(itemBinding);
     }
 

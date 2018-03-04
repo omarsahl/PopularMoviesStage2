@@ -74,8 +74,8 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"
                     app:popupTheme="@style/AppTheme.PopupOverlay">
 
                     <android.support.v7.widget.AppCompatTextView
@@ -102,12 +102,14 @@
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/detailsScrollView"
             android:layout_width="match_parent"
+            android:overScrollMode="always"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <include
                 android:id="@+id/movieDetailsLayout"
                 layout="@layout/movie_details_layout"
+                bind:handlers="@{handlers}"
                 bind:movie="@{movie}" />
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
