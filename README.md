@@ -11,18 +11,18 @@ Second project for the Udacity Android Developer Nanodegree.
 MVVM + Android Architecture Component.
 
 ## Libraries and SDKs Used
-- Android Support Libraries
-- Object Box
-- RxJava + RxAndroid
-- Dagger 2
-- Retrofit
-- Picasso
-- Stetho
-- Fancy Buttons
-- Material Rating Bar
-- Material Dialogs
-- Snacky
-
+- [Android Support Libraries] () 
+- [Object Box] (https://github.com/ReactiveX/RxJava)
+- [RxJava + RxAndroid] (https://github.com/ReactiveX/RxJava)
+- [Dagger 2] (https://google.github.io/dagger/)
+- [Retrofit] (http://square.github.io/retrofit/)
+- [Picasso] (http://square.github.io/picasso/)
+- [Stetho] (http://facebook.github.io/stetho/)
+- [Fancy Buttons] (https://github.com/medyo/Fancybuttons)
+- [Material Rating Bar] (https://github.com/DreaminginCodeZH/MaterialRatingBar)
+- [Material Dialogs] (https://github.com/afollestad/material-dialogs)
+- [Snacky] (https://github.com/matecode/Snacky)
+- [EllipsizeTextView] (https://github.com/dinuscxj/EllipsizeTextView)
 
 ## NOTES
-Add this lines to your gradle.properties file `API_KEY="your-movies-db-api-key"`
+Add this line to your gradle.properties file `API_KEY="your-movies-db-api-key"`
