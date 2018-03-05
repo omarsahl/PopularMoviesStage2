@@ -27,4 +27,4 @@ MVVM + Android Architecture Component.
 - [EllipsizeTextView](https://github.com/dinuscxj/EllipsizeTextView)
 
 ## NOTES
-Get your own API key from (here)[https://www.themoviedb.org], And then add it to your `gradle.properties` file like this `API_KEY="your-movies-db-api-key"
+Get your own API key from [here](https://www.themoviedb.org), And then add it to your `gradle.properties` file like this `API_KEY="your-movies-db-api-key"`
