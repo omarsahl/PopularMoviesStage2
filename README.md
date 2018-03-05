@@ -11,17 +11,17 @@ Second project for the Udacity Android Developer Nanodegree.
 MVVM + Android Architecture Component.
 
 ## Libraries and SDKs Used
-Android Support Libraries
-Object Box
-RxJava + RxAndroid
-Dagger 2
-Retrofit
-Picasso
-Stetho
-Fancy Buttons
-Material Rating Bar
-Material Dialogs
-Snacky
+- Android Support Libraries
+- Object Box
+- RxJava + RxAndroid
+- Dagger 2
+- Retrofit
+- Picasso
+- Stetho
+- Fancy Buttons
+- Material Rating Bar
+- Material Dialogs
+- Snacky
 
 
 ## NOTES
