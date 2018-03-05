@@ -11,7 +11,7 @@ Second project for the Udacity Android Developer Nanodegree.
 MVVM + Android Architecture Component.
 
 ## Libraries and SDKs Used
-- [Android Support Libraries] () 
+- [Android Support Libraries] (https://developer.android.com/topic/libraries/support-library/packages.html) 
 - [Object Box] (https://github.com/ReactiveX/RxJava)
 - [RxJava + RxAndroid] (https://github.com/ReactiveX/RxJava)
 - [Dagger 2] (https://google.github.io/dagger/)
