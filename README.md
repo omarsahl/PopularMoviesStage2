@@ -12,10 +12,12 @@ MVVM + Android Architecture Component.
 
 ## Libraries and SDKs Used
 - [Android Support Libraries] (https://developer.android.com/topic/libraries/support-library/packages.html) 
-- [Object Box] (https://github.com/ReactiveX/RxJava)
+- [Android Architecture Components] (https://developer.android.com/topic/libraries/architecture/index.html)
+- [Object Box] (http://objectbox.io/)
 - [RxJava + RxAndroid] (https://github.com/ReactiveX/RxJava)
 - [Dagger 2] (https://google.github.io/dagger/)
 - [Retrofit] (http://square.github.io/retrofit/)
+- [Gson] (https://github.com/google/gson)
 - [Picasso] (http://square.github.io/picasso/)
 - [Stetho] (http://facebook.github.io/stetho/)
 - [Fancy Buttons] (https://github.com/medyo/Fancybuttons)
