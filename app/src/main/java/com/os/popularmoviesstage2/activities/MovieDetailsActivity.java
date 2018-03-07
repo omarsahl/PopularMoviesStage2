@@ -42,8 +42,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.disposables.CompositeDisposable;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter.OnReviewClickListener, VideosAdapter.OnVideoSelectedListener {
@@ -70,14 +68,14 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
 
     private String youtubeVideoId;
 
-    private CompositeDisposable disposable;
+    //    private CompositeDisposable disposable;
     private Movie movie;
     private boolean isMovieInFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        disposable = new CompositeDisposable();
+//        disposable = new CompositeDisposable();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
         setupUi();
 
@@ -100,6 +98,7 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
         viewModel.getMovie(id).observe(this, movie -> {
             Log.d(TAG, "onCreate: got this movie: " + movie);
             if (MovieDetailsUtils.isNullMovie(movie)) {
+                Log.d(TAG, "onCreate: got dummy movie, showing dialog");
                 hideProgressBar();
                 showNoMovieErrorDialog();
                 return;
@@ -110,7 +109,7 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
         viewModel.getIsMovieInFavorites().observe(this, isInFavorites -> {
             Log.d(TAG, "onCreate: movie is in favorites? " + isInFavorites);
             isMovieInFavorites = isInFavorites;
-            adjustAddToFavoritesButton(isInFavorites);
+            updateAddToFavoritesButton(isInFavorites);
         });
     }
 
@@ -175,6 +174,14 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
     }
 
     private void bindUi(Movie movie) {
+        Log.d(TAG, "bindUi: binding movie to UI");
+        hideProgressBar();
+        showDetailsUi();
+
+        binding.setHandlers(this);
+        binding.setMovie(movie);
+        this.movie = movie;
+
         MovieVideos movieVideos = movie.getVideos().getTarget();
         List<Video> videos = movieVideos.getResults();
         if (videos == null || videos.size() <= 0) {
@@ -203,35 +210,17 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
             reviewsAdapter.updateData(list);
         }
 
+        Picasso.with(MovieDetailsActivity.this)
+                .load(getString(R.string.movies_db_poster_base_url_backdrop_w780) + movie.getBackDropUrl())
+                .into(binding.movieBackdrop);
 
-        binding.setHandlers(this);
-        binding.setMovie(movie);
-        this.movie = movie;
-
-
-        disposable.add(Completable.mergeArray(
-                Completable.fromAction(() -> Picasso.with(MovieDetailsActivity.this)
-                        .load(getString(R.string.movies_db_poster_base_url_backdrop_w780) + movie.getBackDropUrl())
-                        .into(binding.movieBackdrop)),
-
-                Completable.fromAction(() -> Picasso.with(this)
-                        .load(getString(R.string.movies_db_poster_base_url_poster_w342) + movie.getPosterUrl())
-                        .into(binding.movieDetailsLayout.moviePoster)))
-                .subscribe(
-                        () -> {
-                            hideProgressBar();
-                            showDetailsUi();
-                        },
-                        e -> {
-                            Log.e(TAG, "bindUi: error loading movie's poster and backdrop image, skipping layout.", e);
-                            Snackbar.make(getSnackbarParent(), "Couldn't load movie details, Try again", Snackbar.LENGTH_LONG).show();
-                            closeOnError();
-                        }
-                )
-        );
+        Picasso.with(this)
+                .load(getString(R.string.movies_db_poster_base_url_poster_w500) + movie.getPosterUrl())
+                .placeholder(R.drawable.poster_ph)
+                .into(binding.movieDetailsLayout.moviePoster);
     }
 
-    private void adjustAddToFavoritesButton(Boolean isInFavorites) {
+    private void updateAddToFavoritesButton(Boolean isInFavorites) {
         FancyButton favoritesButton = binding.movieDetailsLayout.addToFavoriteButton;
         if (isInFavorites) {
             favoritesButton.setText(getString(R.string.remove_from_favorites));
@@ -271,13 +260,14 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
     }
 
     private void showDetailsUi() {
+        Log.d(TAG, "showDetailsUi: showing details activity ui");
         binding.detailsScrollView.setVisibility(View.VISIBLE);
         binding.appBarRoot.setVisibility(View.VISIBLE);
     }
 
     private void hideDetailsUi() {
-        binding.appBarRoot.setVisibility(View.GONE);
-        binding.detailsScrollView.setVisibility(View.GONE);
+        binding.appBarRoot.setVisibility(View.INVISIBLE);
+        binding.detailsScrollView.setVisibility(View.INVISIBLE);
     }
 
     private void showProgressBar() {
@@ -336,7 +326,7 @@ public class MovieDetailsActivity extends BaseActivity implements ReviewsAdapter
 
     @Override
     protected void onDestroy() {
-        if (disposable != null && !disposable.isDisposed()) disposable.clear();
+//        if (disposable != null && !disposable.isDisposed()) disposable.clear();
         super.onDestroy();
     }
 }

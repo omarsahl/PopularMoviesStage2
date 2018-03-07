@@ -2,6 +2,7 @@
     <string name="app_name">Pop Movies</string>
 
     <string name="movies_db_poster_base_url_poster_w342">http://image.tmdb.org/t/p/w342</string>
+    <string name="movies_db_poster_base_url_poster_w500">http://image.tmdb.org/t/p/w500</string>
     <string name="movies_db_poster_base_url_backdrop_w780">http://image.tmdb.org/t/p/w780</string>
     <string name="movies_db_actor_image_base_url_w342">http://image.tmdb.org/t/p/w342</string>
 
