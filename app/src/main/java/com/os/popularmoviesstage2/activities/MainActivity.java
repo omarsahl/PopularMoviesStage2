@@ -3,6 +3,7 @@ package com.os.popularmoviesstage2.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +28,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private static final String FRAGMENT_TAG_POPULAR = PopularMoviesFragment.class.getSimpleName();
     private static final String FRAGMENT_TAG_TOP_RATED = TopRatedMoviesFragment.class.getSimpleName();
     private static final String FRAGMENT_TAG_FAVORITES = FavoriteMoviesFragment.class.getSimpleName();
+
+    private static final String TAB_INDEX_PREFS_KEY = "tabIndex";
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
@@ -53,7 +56,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         bottomNavigation = findViewById(R.id.bottomNavigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
-        bottomNavigation.setSelectedItemId(R.id.action_popular);
     }
 
     @Override
@@ -96,5 +98,23 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     @Override
     public void onFavoriteMovieClicked(MoviePreview movie) {
         onMovieSelected(movie);
+    }
+
+    @Override
+    protected void onStop() {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .putInt(TAB_INDEX_PREFS_KEY, bottomNavigation.getSelectedItemId())
+                .apply();
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        int id = PreferenceManager.getDefaultSharedPreferences(this)
+                .getInt(TAB_INDEX_PREFS_KEY, R.id.action_popular);
+        bottomNavigation.setSelectedItemId(id);
     }
 }
