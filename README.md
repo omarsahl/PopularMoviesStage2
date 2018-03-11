@@ -1,5 +1,5 @@
 # PopularMoviesStage2
-Second project for the Udacity Android Developer Nanodegree.
+The Second project for the Udacity Android Developer Nanodegree (with some extra features).
 
 ## Screenshots
 <img src="screenshots/Screenshot_20180305-012947.png" height="640" width="360">  <img src="screenshots/Screenshot_20180305-012952.png" height="640" width="360">
@@ -8,7 +8,7 @@ Second project for the Udacity Android Developer Nanodegree.
 <img src="screenshots/Screenshot_20180305-013127.png" height="640" width="360">
 
 ## Features
-MVVM + Android Architecture Component.
+MVVM + Android Architecture Components.
 
 ## Libraries and SDKs Used
 - [Android Support Libraries](https://developer.android.com/topic/libraries/support-library/packages.html) 
